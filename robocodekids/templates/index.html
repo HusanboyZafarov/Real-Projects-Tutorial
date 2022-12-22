@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block meta %}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.get_host }}{{ request.get_full_path }}">
+    <meta property="og:title" content="Robocode Students">
+    <meta property="og:description" content="Robocode Students - Robocode oquvchilari, O'quvchilar uchun portfolio, Ishlar to'plami">
+    <meta property="og:image" content="{{ request.get_host }}{% static 'img/favicon.svg' %}">
+{% endblock meta %}
+    
+
+{% block title %}Bosh sahifa |{% endblock title %}
+{% block style %}
+<style>
+    #banner a {
+        color: blue !important
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+<main class="bg-[#E0E0EC] px-3 pt-24 pb-8 lg:pt-6 lg:pb-6">
+        <div class="container mx-auto">
+            <div class="py-5 h-auto">
+                <div id="banner" class="swiper home-swiper rounded-[15px] md:h-[300px] w-full sm:w-[75%] md:w-[95%] h-auto">
+                    <div class="swiper-wrapper rounded-[15px]">
+                        {% for banner in banners %}
+                        <div class="swiper-slide bg-white rounded-[15px]">
+                            <div class="flex items-center pb-4 flex-col md:flex-row justify-between">
+                                <img src="{{ banner.image.url }}" class="w-full min-h-[200px] lg:h-[300px] rounded-[15px] object-contain px-3 pb-0 md:pb-6 lg:pb-0 md:px-0 border" alt="{{ banner.title }}">
+                                <div class="p-5 px-6">
+                                    <a href="{{ banner.to_url }}" class="text-3xl font-bold">{{ banner.title|safe }}</a>
+                                    <p class="my-3 text-xl font-medium">{{ banner.description|safe }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            <div class="text-4xl font-semibold text-center md:text-left my-7">
+                <h1>Eng yaxshi ishlar</h1>
+            </div>
+            <!-- top works images -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+                {% for top_work in top_works %}
+                <div class="shadow-md">
+                    <a href="{{ top_work.get_absolute_url }}" target="__blank">
+                        <img src="{{ top_work.image.url }}" class="w-full h-[300px] transition-all duration-300 hover:scale-[1.05] rounded-md object-cover bg-center" alt="">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- end top works images -->
+            <div class="text-4xl font-semibold text-center md:text-left my-7">
+                <h1>"The best student"</h1>
+            </div>
+            <!-- top students -->
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                {% for top_student in top_students %}
+                <!-- student -->
+                <div class="flex items-center gap-3 bg-white rounded-lg py-3 px-5">
+                    <a href="{{ top_student.get_absolute_url }}">
+                        <img src="{{ top_student.avatar.url }}" class="w-24 h-24 object-cover bg-center rounded-full p-1 border border-gray-500" alt="{{ top_student.username }}">
+                    </a>
+                    <div class="full_name">
+                        {% if top_student.full_name %}
+                        <a href="{{ top_student.get_absolute_url }}" class="text-xl md:text-2xl font-medium hover:underline">{{ top_student.full_name }}</a>
+                        {% else %}
+                        <a href="{{ top_student.get_absolute_url }}" class="text-xl md:text-2xl font-medium hover:underline">{{ top_student.username }}</a>
+                        {% endif %}
+                        <h4 class="text-medium text-lg md:text-xl">{{ top_student.bio|slice:"100" }}</h4>
+                    </div>
+                </div>
+                <!-- end student -->
+                {% endfor %}
+            </div>
+            <!-- end top students -->
+            <div class="text-4xl font-semibold text-center md:text-left my-7">
+                <h1>O'quvchilar reytingi</h1>
+            </div>
+            {% for student_rating in student_ratings %}
+            <!-- student rating -->
+            <div class="w-full py-2 px-4 rounded-xl bg-[#bbb] flex items-center
+            justify-between mb-3
+            shadow-[0_0_20px_5px_rgba(255,255,255,0.4)] relative
+            ">
+                <div class="flex items-center gap-3">
+                    <img src="{{ student_rating.avatar.url }}" class="rounded-full w-12 h-12" alt="">
+                    <div class="full_name">
+                        {% if student_rating.full_name %}
+                        <a href="{{ student_rating.get_absolute_url }}" class="text-xl block font-semibold">{{ student_rating.full_name }}</a>
+                        {% else %}
+                        <a href="{{ student_rating.get_absolute_url }}" class="text-xl block font-semibold">{{ student_rating.username }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="hidden lg:flex absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:flex items-center">
+                    <div class="mr-16 ml-10 flex items-center gap-2">
+                        <img src="{% static 'img/icon/heart.png' %}" class="w-6" alt="like">
+                        <h4 class="text-md font-bold">{{ student_rating.total_likes }}</h4>
+                    </div>
+                    <div class="mr-5 flex items-center gap-2">
+                        <img src="{% static 'img/icon/task.svg' %}" class="w-7" alt="task">
+                        <h4 class="text-md font-bold">{{ student_rating.total_works }}</h4>
+                    </div>
+                </div>
+                <img class="grades" src="" class="w-12" alt="">
+                <h1 class="text-xl mr-3 font-medium">{{ forloop.counter }}th</h1>
+            </div>
+            <!-- end student rating -->
+            {% endfor %}
+            <div class="text-4xl font-semibold text-center md:text-left my-10">
+                <h1>Aloqa</h1>
+            </div>
+            <div id="contact" class="grid grid-cols-1 md:grid-cols-2">
+                <div id="rotate-img" class="rotate-[-40deg] translate-x-[0] md:translate-x-[-90px] transition-all duration-500">
+                    <img src="{% static 'img/contact.png' %}" class="w-90" alt="">
+                </div>
+                <form action="{% url 'works:create-contact' %}" method="post" class="w-full p-5 pt-10 md:pt-10 lg:pt-32">
+                    {% csrf_token %}
+                    <!-- input -->
+                    <input type="text"
+                    class="w-full rounded-lg h-14 block outline-0 pl-5 mb-5"
+                    placeholder="Ism Familya*"
+                    required name="name"
+                    >
+                    <!-- input -->
+                    <input type="number"
+                    class="w-full rounded-lg h-14 block outline-0 pl-5 mb-5"
+                    placeholder="Telefon raqam (99-999-9999)*"
+                    required name="phone"
+                    >
+                    <!-- input -->
+                    <!-- textarea -->
+                    <textarea class="w-full h-40 max-h-[300px] min-h-[100px] rounded-lg h-14 block outline-0 pt-5 pl-5 mb-5" placeholder="Habar*" name="message" required></textarea>
+                    <!-- textarea -->
+                    <button class="bg-[#FDC904] py-3 w-full rounded-lg text-white text-xl my-2 border">Yuborish</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block script %}
+
+<script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'js/tailwind.js' %}"></script>
+<script>
+    // grade images fix
+    grades = document.querySelectorAll('.grades')
+    console.log(grades)
+    grades[0].attributes['src'].value = '/static/img/rating-icon/first.svg'
+    grades[0].parentElement.classList.replace('bg-[#bbb]', 'bg-[rgba(252,194,27,0.7)]')
+    grades[0].nextElementSibling.classList.add('hidden')
+    grades[1].attributes['src'].value = '/static/img/rating-icon/second.svg'
+    grades[1].nextElementSibling.classList.add('hidden')
+    grades[1].parentElement.classList.replace('bg-[#bbb]', 'bg-[#ccc]')
+    grades[2].nextElementSibling.classList.add('hidden')
+    grades[2].attributes['src'].value = '/static/img/rating-icon/third.svg'
+    grades[2].parentElement.classList.replace('bg-[#bbb]', 'bg-[rgba(248,161,67,0.5)]')
+    // start swiper
+    var swiper = new Swiper(".home-swiper", {
+        loop: true,
+        effect: 'cube',
+        speed: 700,
+        keyboard: true,
+        autoplay: {
+            delay: 3000,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        }
+    });
+</script>
+
+{% endblock %}

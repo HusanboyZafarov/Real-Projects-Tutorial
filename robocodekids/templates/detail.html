@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ work.title }}{% endblock title %}
+
+{% block meta %}
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.get_host }}{{ request.get_full_path }}">
+<meta property="og:title" content="{{ work.title }}">
+<meta property="og:description"
+    content="{{ work.description }}">
+<meta property="og:image" content="{{ request.get_host }}{{ work.image.url }}">
+{% endblock meta %}
+
+
+{% block content %}
+<main class="bg-[#E0E0EC] px-3 pt-24 pb-8 lg:pt-6 lg:pb-6">
+    <div class="container mx-auto my-5">
+        <div class="grid grid-cols-1 md:grid-cols-10 items-start gap-3">
+            <div
+                class="card col-span-full md:col-span-6 w-full h-auto bg-white rounded-lg pb-5 relative my-1 shadow-[0_0.5em_1em_-0.125em_rgb(10_10_10_/_10%)]">
+                <div class="p-4 pb-0">
+                    <div class="profile-view flex items-center gap-5">
+                        <div class="user-image">
+                            <img src="{{ work.author.avatar.url }}" class="w-14 h-14 rounded-full"
+                                alt="{{ work.author }}" />
+                        </div>
+                        <div class="username">
+                            <a href="{{ work.author.get_absolute_url }}"
+                                class="text-xl lg:text-2xl font-medium hover:underline">{{ work.author.username }}</a>
+                            <br />
+                            <a href="{{ work.to_work }}" class="text-lg font-medium text-[#555]">{{ work.title }}</a>
+                        </div>
+                    </div>
+                    <div class="w-full h-[1px] bg-[#555] mt-[10px]"></div>
+                    <p class="py-2 mb-3 text-xl">
+                        {{ work.description }}
+                    </p>
+
+                </div>
+                <div class="p-4 pt-0">
+                    <a href="{{ work.to_work }}">
+                        <img src="{{ work.image.url }}" class="w-full object-cover rounded-md"
+                            alt="{{ work.image.url }}" />
+                    </a>
+                    <div class="mt-4">
+                        <div class="flex items-center justify-between">
+                            {% if work.id in request.session.like_list %}
+                            <div id="workLike" onclick="ProjectLike('{{ work.id }}')"
+                                class="cursor-pointer flex items-center gap-2 bg-yellow-400 border py-2 px-3 rounded-md">
+                                <div class="relative">
+                                    <img src="{% static 'img/icon/heart.png' %}" width="32px" height="32px" alt="" />
+                                </div>
+                                <span class="font-bold text-lg" id="workLikeCount">{{ work.likes }}</span>
+                            </div>
+                            {% else %}
+                            <div id="workLike" onclick="ProjectLike('{{ work.id }}')"
+                                class="cursor-pointer flex items-center gap-2 border py-2 px-3 rounded-md">
+                                <div class="relative">
+                                    <img src="{% static 'img/icon/heart.png' %}" width="32px" height="32px" alt="" />
+                                </div>
+                                <span class="font-bold text-lg" id="workLikeCount">{{ work.likes }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="cursor-pointer flex items-center gap-2 bg-blue-400 border py-2 px-3 rounded-md">
+                                <img src="{% static 'img/icon/eye.png' %}" width="32px" height="32px" alt="" />
+                                <span class="font-bold text-lg">{{ work.views_count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4">
+                    <a href="{{ work.to_work }}"
+                        class="block text-center md:inline-block py-2 px-5 rounded-md bg-[#FDC905] text-white font-medium shadow-2xl">Berilgan manzilga o'tish</a>
+                </div>
+            </div>
+            <div
+                class="card col-span-full md:col-span-4 w-full h-auto bg-white rounded-lg pb-5 relative my-1 shadow-[0_0.5em_1em_-0.125em_rgb(10_10_10_/_10%)] p-3">
+                {% if author_works %}
+                <h1 class="text-2xl font-medium mb-3">Foydalanuvchining boshqa ishlari</h1>
+                {% else %}
+                <h1 class="text-2xl font-medium mb-3">Foydalanuvchining boshqa ishlari hozircha yo'q</h1>
+                {% endif %}
+                {% for work in author_works %}
+                <!-- // -->
+                <a href="{{ work.get_absolute_url }}"
+                    class="w-full bg-white rounded-lg flex items-center justify-between flex-wrap mb-3 shadow-md border">
+                    <div class="w-full lg:w-[40%]">
+                        <img src="{{ work.image.url }}" class="w-full h-auto md:h-[150px] rounded-md object-cover"
+                            alt="{{ work.title }}">
+                    </div>
+                    <div class="block w-full lg:w-[60%] p-3">
+                        <h1 class="text-2xl font-medium hover:text-blue-500">{{ work.title }}</h2>
+                            <p>{{ work.description|slice:"50" }}</p>
+                            <hr class="my-2">
+                            <div class="my-1 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-1">
+                                    <img src="{% static 'img/icon/heart.png' %}" class="w-6" alt="likes">
+                                    {{ work.likes }}
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <img src="{% static 'img/icon/eye.png' %}" class="w-6" alt="eye">
+                                    {{ work.views_count }}
+                                </div>
+                            </div>
+                    </div>
+                </a>
+                <!-- // -->
+                {% endfor %}
+                {% if author_works %}
+                <a href="{% url 'works:my-project-list' work.author.username %}"
+                    class="block text-center py-2 px-5 rounded-md bg-[#FDC905] text-white font-medium shadow-2xl mt-5">Barchasini
+                    ko'rish</a>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    function ProjectLike(post_id, event)
+    {
+        let data = JSON.stringify({ id: parseInt(post_id) })
+        fetch(`/like/?data=${data}`)
+        .then(res => res.json())
+        .then(data => {
+            el = document.getElementById('workLike')
+            _el = document.getElementById('workLikeCount')
+            _count = parseInt(_el.innerHTML)
+            if (data['status'] === 10) {
+                el.classList.add('bg-yellow-400')
+                _el.innerHTML = _count + 1
+            } else if (data['status'] === 20) {
+                el.classList.remove('bg-yellow-400')
+                _el.innerHTML = _count - 1
+            }
+        })
+        .catch(err => console.log(err))
+        // if (window.XMLHttpRequest)
+        // {
+        //     var xhttp = new XMLHttpRequest();
+        // } else
+        // { // code for IE6, IE5
+        //     var xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        // }
+        // xhttp.onreadystatechange = function ()
+        // {
+        //     if (xhttp.readyState === 4 && xhttp.status === 200)
+        //     {
+        //         var data = JSON.parse(this.responseText);
+        //         console.log(data)
+        //     } else
+        //     {
+        //         console.log(xhttp.status)
+        //     }
+        // }
+        // var url = "/projects/like/"
+        // xhttp.open("GET", url + `?data=${data}`, true);
+        // xhttp.send();
+    }
+</script>
+<script src="{% static 'js/tailwind.js' %}"></script>
+{% endblock script %}

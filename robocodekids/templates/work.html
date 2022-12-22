@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ishlar ro'yhati |{% endblock %}
+
+{% block content %}
+<main class="bg-[#E0E0EC] px-3 pt-24 pb-8 md:pt-6 md:pb-6 {% if works|length <= 4 %}h-screen{% endif %}">
+  <div class="container mx-auto">
+    {% if works %}
+    <div class="w-full flex items-center flex-col sm:justify-between sm:flex-row justify-center flex-wrap">
+      <h2 class="text-2xl font-medium">Ishlar ro'yhati</h2>
+      <a href="{% url 'work:create-project' %}"
+        class="py-3 px-8 bg-gray-300 rounded-xl my-3 hover:shadow-[0_0_55px_0px_rgba(255,255,255,1)]">+ Ish qoshish</a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+      {% for work in works %}
+      <!-- detail -->
+      <div
+        class="card w-full h-auto bg-white rounded-lg pb-0 relative my-1 shadow-[0_0.5em_1em_-0.125em_rgb(10_10_10_/_10%)]">
+        <div class="p-4 pb-0">
+          <div class="profile-view flex items-center gap-5">
+            <div class="user-image">
+              <img src="{{ work.author.avatar.url }}" class="w-14 h-14 rounded-full" alt="{{ work.author }}" />
+            </div>
+            <div class="username">
+              <a href="{{ work.author.get_absolute_url }}" class="text-md lg:text-lg font-medium hover:underline">{{
+                work.author.username }}</a>
+              <br />
+              <a href="{{ work.get_absolute_url }}" class="text-sm font-medium text-[#555]">{{ work.title|slice:"20"
+                }}</a>
+            </div>
+          </div>
+          <div class="w-full h-[1px] bg-[#555] mt-[10px]"></div>
+          <a href="{{ work.get_absolute_url }}">
+            <div class="post-image my-3">
+              <img src="{{ work.image.url }}" class="w-full h-auto md:h-[180px] object-cover rounded-md"
+                alt="{{ work.image.url }}" />
+            </div>
+            <div class="w-full h-[1px] bg-[#555]"></div>
+            <div class="pt-1 pb-2">
+              <div class="flex items-center justify-between">
+                <div class="cursor-pointer flex items-center gap-2">
+                  <img src="{% static 'img/icon/heart.png' %}" width="27px" height="27px" alt="" />
+                  <span class="font-bold text-md">{{ work.likes }}</span>
+                </div>
+                <div class="cursor-pointer flex items-center gap-2">
+                  <img src="{% static 'img/icon/eye.png' %}" width="27px" height="27px" alt="" />
+                  <span class="font-bold text-md">{{ work.views_count }}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- end detail -->
+
+    </div>
+    {% if page_obj.number > 1 %}
+    <nav class="flex items-center justify-center sm:justify-between flex-wrap-reverse">
+      <ul class="inline-flex -space-x-px flex-wrap">
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="my-3">
+          <a href="?page={{ num }}" aria-current="page"
+            class="py-2 px-4 rounded-md mr-2 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700">{{
+            num }}</a>
+        </li>
+        {% else %}
+        <li class="my-3">
+          <a href="?page={{ num }}"
+            class="py-2 px-4 rounded-md mr-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{
+            num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="flex items-center my-5 gap-2 flex-wrap justify-center">
+        <!-- Previous Button -->
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"
+          class="inline-flex items-center py-2 my-1 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+          <svg aria-hidden="true" class="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+          Oldingi sahifa
+        </a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+          class="inline-flex items-center py-2 px-4 my-1 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+          Keyingi sahifa
+          <svg aria-hidden="true" class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+    {% else %}
+    <h3 class="text-xl mt-5">Barcha ishlar hozircha shu 🤷‍♂️</h3>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="text-center">
+    <h3 class="text-4xl mb-8">Ishlar topilmadi !</h3>
+    <a href="{% url 'work:create-project' %}"
+      class="py-2 px-5 text-lg bg-yellow-400 text-white rounded-xl my-3 hover:shadow-[0_0_55px_0px_rgba(255,255,255,1)]">+
+      Ish qoshish</a>
+    <br>
+    <br>
+  </div>
+  {% endif %}
+</main>
+{% block script %}
+<script src="{% static 'js/tailwind.js' %}"></script>
+{% endblock script %}
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
+        <title>Kirish | Robocodekids</title>
+    </head>
+
+    <body class="bg-[#E0E0EC]">
+
+        <!-- Form -->
+        <div class="container mx-auto px-3 md:px-8 mt-20 mb-20 md:mt-15">
+            <form class="lg:w-1/2 md:w-1/1 bg-white shadow-lg rounded px-3 md:px-8 p-3 pb-8 mx-auto">
+                <div class="flex justify-center">
+                    <a href="/" class="navbar-brand">
+                        <img src="{% static 'img/robocode-logo-png.png' %}" class="w-60" alt="" />
+                    </a>
+                </div>
+                <div class="md:my-6 my-10 text-center text-2xl">
+                    Siz hisobdan chiqdingiz <a class="text-blue-500" href="{% url 'account:login' %}">qayta kirish</a>
+                </div>
+                <div class="text-center">
+                    <a href="/" class="py-2 px-4 bg-yellow-400 text-white rounded-md">Bosh sahifaga qaytish</a>
+                </div>
+            </form>
+        </div>
+
+        <script src="{% static 'js/tailwind.js' %}"></script>
+
+    </body>
+
+</html>
