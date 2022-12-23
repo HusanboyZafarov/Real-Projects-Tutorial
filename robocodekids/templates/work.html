@@ -4,15 +4,14 @@
 {% block title %}Ishlar ro'yhati |{% endblock %}
 
 {% block content %}
-<main class="bg-[#E0E0EC] px-3 pt-24 pb-8 md:pt-6 md:pb-6 {% if works|length <= 4 %}h-screen{% endif %}">
+<main class="bg-[#E0E0EC] px-3 pt-24 pb-8 md:pt-20 md:pb-6 min-h-[84vh]">
   <div class="container mx-auto">
     {% if works %}
     <div class="w-full flex items-center flex-col sm:justify-between sm:flex-row justify-center flex-wrap">
       <h2 class="text-2xl font-medium">Ishlar ro'yhati</h2>
       <a href="{% url 'work:create-project' %}"
-        class="py-3 px-8 bg-gray-300 rounded-xl my-3 hover:shadow-[0_0_55px_0px_rgba(255,255,255,1)]">+ Ish qoshish</a>
+        class="py-3 px-11 bg-gray-300 rounded-xl my-3 hover:shadow-[0_0_55px_0px_rgba(255,255,255,1)]">+ Ish qoshish</a>
     </div>
-
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
       {% for work in works %}
       <!-- detail -->
@@ -24,11 +23,9 @@
               <img src="{{ work.author.avatar.url }}" class="w-14 h-14 rounded-full" alt="{{ work.author }}" />
             </div>
             <div class="username">
-              <a href="{{ work.author.get_absolute_url }}" class="text-md lg:text-lg font-medium hover:underline">{{
-                work.author.username }}</a>
+              <a href="{{ work.author.get_absolute_url }}" class="text-md lg:text-lg font-medium hover:underline">{{work.author.username }}</a>
               <br />
-              <a href="{{ work.get_absolute_url }}" class="text-sm font-medium text-[#555]">{{ work.title|slice:"20"
-                }}</a>
+              <a href="{{ work.get_absolute_url }}" class="text-sm font-medium text-[#555]">{{ work.title|slice:"20" }}</a>
             </div>
           </div>
           <div class="w-full h-[1px] bg-[#555] mt-[10px]"></div>
